@@ -34,7 +34,7 @@ class TodoController extends GetxController {
 
   void addTodo(String title) {
     final todo = TodoModel(title, false);
-    todoBox?.put(todo.title, todo);
+    todoBox?.add(todo);
     todos.add(todo);
     _rxTodos.add(todo); // Update the reactive list
   }
