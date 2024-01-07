@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
             Expanded(
               child: Obx(
                 () {
-                  final todos = todoController.todos;
+                  final todos = todoController.rxTodos;
                   return ListView.builder(
                     itemCount: todos.length,
                     itemBuilder: (context, index) {

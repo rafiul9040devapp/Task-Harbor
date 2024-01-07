@@ -6,7 +6,10 @@ import '../model/todo_model.dart';
 
 class TodoController extends GetxController {
   Box<TodoModel>? todoBox;
-  RxList<TodoModel> todos = <TodoModel>[].obs;
+  late List<TodoModel> todos; // Use regular List for persistence
+
+  RxList<TodoModel> _rxTodos = <TodoModel>[].obs;
+  RxList<TodoModel> get rxTodos => _rxTodos;
 
   @override
   void onInit() async {
@@ -17,10 +20,12 @@ class TodoController extends GetxController {
   Future<void> openBox() async {
     try {
       todoBox = await HiveInit.openBox<TodoModel>('todoBox');
-      todos.bindStream(
+      todos = todoBox?.values.toList() ?? []; // Initialize todos with values from the box
+      _rxTodos.assignAll(todos); // Update the reactive list
+      _rxTodos.bindStream(
         todoBox!.watch().map(
               (event) => (event).value,
-            ),
+        ),
       );
     } catch (e) {
       print('Error initializing Hive box: $e');
@@ -29,8 +34,9 @@ class TodoController extends GetxController {
 
   void addTodo(String title) {
     final todo = TodoModel(title, false);
-    todoBox?.put(todo.title,todo);
+    todoBox?.put(todo.title, todo);
     todos.add(todo);
+    _rxTodos.add(todo); // Update the reactive list
   }
 
   void editTodoTitle(int index, String newTitle) {
@@ -39,6 +45,7 @@ class TodoController extends GetxController {
       todo.title = newTitle;
       todo.save();
       todos[index] = todo;
+      _rxTodos.assignAll(todos); // Update the reactive list
     }
   }
 
@@ -46,16 +53,17 @@ class TodoController extends GetxController {
     final todo = todoBox?.getAt(index);
     if (todo != null) {
       todo.isDone = isDone;
-      todo.title = todo.title;
       todo.save();
       todos[index] = todo;
+      _rxTodos.assignAll(todos); // Update the reactive list
     }
   }
 
   void deleteTodo(int index) {
     todoBox?.deleteAt(index);
     todos.removeAt(index);
+    _rxTodos.assignAll(todos); // Update the reactive list
   }
 
-  List<TodoModel> getTodos() => todoBox?.values.toList() ?? [];
+  List<TodoModel> getTodos() => todos;
 }
