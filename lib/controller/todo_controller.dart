@@ -17,7 +17,6 @@ class TodoController extends GetxController {
             (event) => (event).value,
       ));
     } catch (e) {
-      // Handle the exception, e.g., log an error or show a message to the user
       print('Error initializing Hive box: $e');
     }
   }
@@ -33,7 +32,7 @@ class TodoController extends GetxController {
     if (todo != null) {
       todo.title = newTitle;
       todo.save();
-      todos[index] = todo; // Update the existing todo in the list
+      todos[index] = todo;
     }
   }
 
