@@ -11,11 +11,17 @@ class TodoController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    await openBox();
+  }
+
+  Future<void> openBox() async {
     try {
       todoBox = await HiveInit.openBox<TodoModel>('todoBox');
-      todos.bindStream(todoBox!.watch().map(
-            (event) => (event).value,
-      ));
+      todos.bindStream(
+        todoBox!.watch().map(
+              (event) => (event).value,
+            ),
+      );
     } catch (e) {
       print('Error initializing Hive box: $e');
     }
@@ -23,7 +29,7 @@ class TodoController extends GetxController {
 
   void addTodo(String title) {
     final todo = TodoModel(title, false);
-    todoBox?.add(todo);
+    todoBox?.put(todo.title,todo);
     todos.add(todo);
   }
 
@@ -36,11 +42,11 @@ class TodoController extends GetxController {
     }
   }
 
-
   void updateTodoStatus(int index, bool isDone) {
     final todo = todoBox?.getAt(index);
     if (todo != null) {
       todo.isDone = isDone;
+      todo.title = todo.title;
       todo.save();
       todos[index] = todo;
     }

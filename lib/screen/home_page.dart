@@ -13,7 +13,8 @@ class HomePage extends StatelessWidget {
     final TextEditingController textEditingController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Todo App'),
+        title: const Text('Task Harbor'),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -25,7 +26,7 @@ class HomePage extends StatelessWidget {
                 todoController.addTodo(value);
                 textEditingController.clear();
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Add a new task...',
               ),
             ),
@@ -112,11 +113,11 @@ void _showEditDialog(BuildContext context, int index, String currentTitle) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Edit Todo'),
+        title: const Text('Edit Task',textAlign: TextAlign.center,),
         content: TextField(
           controller: editingController,
-          decoration: InputDecoration(
-            labelText: 'New Title',
+          decoration: const InputDecoration(
+            labelText: 'New Task',
           ),
         ),
         actions: [
