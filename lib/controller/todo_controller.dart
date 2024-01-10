@@ -8,7 +8,7 @@ class TodoController extends GetxController {
   Box<TodoModel>? todoBox;
   late List<TodoModel> todos; // Use regular List for persistence
 
-  RxList<TodoModel> _rxTodos = <TodoModel>[].obs;
+  final RxList<TodoModel> _rxTodos = <TodoModel>[].obs;
   RxList<TodoModel> get rxTodos => _rxTodos;
 
   @override
@@ -55,6 +55,7 @@ class TodoController extends GetxController {
       todo.isDone = isDone;
       todo.save();
       todos[index] = todo;
+      update();
       _rxTodos.assignAll(todos); // Update the reactive list
     }
   }
@@ -62,6 +63,7 @@ class TodoController extends GetxController {
   void deleteTodo(int index) {
     todoBox?.deleteAt(index);
     todos.removeAt(index);
+    update();
     _rxTodos.assignAll(todos); // Update the reactive list
   }
 

@@ -13,21 +13,37 @@ class HomePage extends StatelessWidget {
     final TextEditingController textEditingController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Task Harbor'),
+        title: Text(
+          'Task Harbor',
+          style: TextStyle(fontSize: 25.sp, color: Colors.black),
+        ),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
-              controller: textEditingController,
-              onSubmitted: (value) {
-                todoController.addTodo(value);
-                textEditingController.clear();
-              },
-              decoration: const InputDecoration(
-                hintText: 'Add a new task...',
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: textEditingController,
+                style: TextStyle(fontSize: 20.sp, color: Colors.black),
+                onSubmitted: (value) {
+                  if (value.isNotEmpty) {
+                    todoController.addTodo(value);
+                  }
+                  textEditingController.clear();
+                },
+                decoration: InputDecoration(
+                    hintText: 'Add a new task...',
+                    hintStyle: TextStyle(fontSize: 18.sp, color: Colors.black),
+                    prefixIcon: Icon(
+                      Icons.work_history_outlined,
+                      size: 20.sp,
+                      color: Colors.black,
+                    ),
+                  focusColor: Colors.white
+                ),
               ),
             ),
             20.verticalSpace,
@@ -40,15 +56,17 @@ class HomePage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final todo = todos[index];
                       return Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Card(
-                          elevation: 5,
+                          color: Colors.white10,
+                          elevation: 2,
                           child: Padding(
-                            padding: const EdgeInsets.all(4.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: ListTile(
                               title: Text(
                                 todo.title,
                                 style: TextStyle(
+                                  fontSize: 18.sp,
                                   color:
                                       todo.isDone ? Colors.red : Colors.black,
                                   decoration: todo.isDone
@@ -62,7 +80,7 @@ class HomePage extends StatelessWidget {
                                   todoController.updateTodoStatus(
                                       index, value!);
                                 },
-                                activeColor: Colors.greenAccent,
+                                activeColor: Colors.green,
                               ),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -113,7 +131,10 @@ void _showEditDialog(BuildContext context, int index, String currentTitle) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Edit Task',textAlign: TextAlign.center,),
+        title: const Text(
+          'Edit Task',
+          textAlign: TextAlign.center,
+        ),
         content: TextField(
           controller: editingController,
           decoration: const InputDecoration(
@@ -127,18 +148,18 @@ void _showEditDialog(BuildContext context, int index, String currentTitle) {
               todoController.editTodoTitle(index, editingController.text);
               Navigator.of(context).pop();
             },
-            child: const Text(
+            child:  Text(
               'Save',
-              style: TextStyle(color: Colors.greenAccent),
+              style: TextStyle(color: Colors.green,fontSize: 18.sp),
             ),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text(
+            child:  Text(
               'Cancel',
-              style: TextStyle(color: Colors.redAccent),
+              style: TextStyle(color: Colors.redAccent,fontSize: 18.sp),
             ),
           ),
         ],
